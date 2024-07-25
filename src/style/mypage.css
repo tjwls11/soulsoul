@@ -1,66 +1,139 @@
+/* MyPage 스타일 */
+.mypage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.sec {
+  width: 80%;
+  max-width: 800px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px auto;
+}
+
 .sec-box {
-    width: 700px;
-    height: 500px;
-    margin: auto;
-    font-size: 15px;
-    margin-top: 50px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: black;
-    border-radius: 10px;
-  }
-  .sec-main {
-    font-size: 30px;
-    text-align: center;
-  }
-  /* 이미지를 원형으로 만들어줌*/
-  .sec-img {
-    width: 150px;
-    height: 150px;
-    border-radius: 70%;
-    overflow: hidden;
-    display: block;
-    margin: auto;
-  }
-  .sec-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  table {
-    width: 100%;
-    border: 1px solid #000;
-    border-collapse: collapse;
-    margin-top: 30px;
-  }
-  th,
-  td {
-    border: 1px solid #000;
-    padding: 10px;
-    text-align: center;
-  }
-  /* 테이블 왼쪽부분 배경색과 글자색 지정*/
-  tbody th {
-    color: white;
-    background-color: forestgreen;
-    font: bold;
-  }
-  th {
-    margin-right: 20px;
-  }
-  h2 {
-    font-size: 20px;
-    text-align: center;
-  }
-  /*수정 버튼*/
-  .sec-wrap {
-    display: inline-block;
-    width: 70px;
-    height: 20px;
-    margin-left: 300px;
-    padding: 10px;
-    border: 3px solid #000;
-    border-radius: 2px;
-    color: #000;
-    background-color: #fffaf0;
-  }
+  font-size: 16px;
+  border: none;
+}
+
+.sec-main {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sec-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.sec-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+tbody th {
+  color: #fff;
+  background-color: #4CAF50;
+  font-weight: bold;
+}
+
+th {
+  font-size: 16px;
+}
+
+h2.sec-wrap {
+  font-size: 18px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.sec-wrap {
+  display: inline-block;
+  width: auto;
+  padding: 8px 16px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  color: #333;
+  background-color: #f5f5f5;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sec-wrap:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.password-change {
+  margin-top: 20px;
+}
+
+.input {
+  width: calc(100% - 24px);
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.Change-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #4CAF50;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.Change-button:hover {
+  background-color: #45a049;
+}
+
+.out {
+  display: block;
+  text-align: center;
+  font-size: 16px;
+  color: #007bff;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: color 0.3s ease;
+}
+
+.out:hover {
+  color: #0056b3;
+}
