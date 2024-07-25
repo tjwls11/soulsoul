@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const AddDiary = () => {
+function AddDiary() {
   const [date, setDate] = useState('');
   const [title, setTitle] = useState('');
   const [oneLine, setOneLine] = useState('');
@@ -9,7 +9,7 @@ const AddDiary = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // 폼 제출 기본 동작 방지
     const token = localStorage.getItem('token'); // 저장된 JWT 토큰 가져오기
 
     const diaryData = {
@@ -28,15 +28,14 @@ const AddDiary = () => {
         },
         body: JSON.stringify(diaryData),
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
       const result = await response.json();
 
       if (result.isSuccess) {
         alert('일기가 성공적으로 저장되었습니다.');
+        setDate('');
+        setTitle('');
+        setOneLine('');
+        setDiaryContent('');
         navigate('/diary'); // 일기 작성 후 목록 페이지로 이동
       } else {
         alert('일기 저장에 실패했습니다.');
@@ -97,6 +96,6 @@ const AddDiary = () => {
       </form>
     </div>
   );
-};
+}
 
 export default AddDiary;

@@ -34,11 +34,19 @@ const Diary = () => {
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token'); // 저장된 JWT 토큰 가져오기
     try {
-      await fetch(`http://localhost:3011/delete-diary/${id}`, {
+      const response = await fetch(`http://localhost:3011/delete-diary/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` } // JWT 토큰을 Authorization 헤더에 포함
+        headers: {
+          'Authorization': `Bearer ${token}` // JWT 토큰을 Authorization 헤더에 포함
+        }
       });
-      setDiaries(diaries.filter((diary) => diary.id !== id));
+
+      if (response.ok) { // 요청이 성공적일 경우
+        setDiaries(diaries.filter((diary) => diary.id !== id));
+      } else {
+        // 서버 응답이 성공적이지 않은 경우
+        console.error('Failed to delete the diary:', await response.text());
+      }
     } catch (error) {
       console.error('Error deleting diary:', error);
     }
