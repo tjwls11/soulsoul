@@ -1,3 +1,4 @@
+// Navbar.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLogin } from '../context/LoginContext'; // 로그인 훅 사용
@@ -10,12 +11,8 @@ const Navbar = () => {
       <div className="navbar-links">
         {user ? ( // 로그인된 경우
           <>
-            <Link to="/diary">Diary</Link>
-            <Link to="/moodtracker">Mood Tracker</Link>
-            <Link to="/analyze">Analyze</Link>
             <Link to="/mypage">My Page</Link>
-            <Link to="/Shopping">Shopping</Link>
-            <Link to="/StickerUpload">StickerUpload</Link>
+            <Link to="/calendar">Calendar</Link>
             <button className="logout-button" onClick={logout}>Logout</button>
           </>
         ) : ( // 로그인되지 않은 경우

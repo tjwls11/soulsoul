@@ -5,6 +5,7 @@ import Login from './components/login';
 import Signup from './components/signup';
 import MyPage from './components/mypage';
 import Navbar from './components/navbar';
+import Calendar from './components/calendar';
 import { LoginProvider } from './context/LoginContext';
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/calendar" element={<Calendar />} />
         </Routes>
       </Router>
     </LoginProvider>
