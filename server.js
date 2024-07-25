@@ -87,7 +87,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// 유저 정보 엔드포인트
+// 사용자 정보 조회 엔드포인트
 app.get('/user-info', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1]; // Assuming Bearer token
 
@@ -97,10 +97,8 @@ app.get('/user-info', async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, secretKey);
-    const user_id = decoded.user_id;
-
     const connection = await mysql.createConnection(dbConfig);
-    const [results] = await connection.execute('SELECT user_id, name FROM user WHERE user_id = ?', [user_id]);
+    const [results] = await connection.execute('SELECT name, user_id, coin FROM user WHERE user_id = ?', [decoded.user_id]);
     await connection.end();
 
     if (results.length === 0) {
@@ -109,34 +107,84 @@ app.get('/user-info', async (req, res) => {
 
     res.json({ user: results[0] });
   } catch (err) {
-    console.error('Error fetching user data:', err);
-    res.status(500).json({ isSuccess: false, message: 'Server error' });
+    console.error('Error fetching user info:', err);
+    res.status(500).json({ isSuccess: false, message: 'Server error: ' + err.message });
+  }
+});
+
+// 비밀번호 변경 엔드포인트
+app.post('/change-password', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1]; // Assuming Bearer token
+
+  if (!token) {
+    return res.status(401).json({ isSuccess: false, message: 'Unauthorized' });
+  }
+
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ isSuccess: false, message: 'All fields are required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    const connection = await mysql.createConnection(dbConfig);
+    const [results] = await connection.execute('SELECT password FROM user WHERE user_id = ?', [decoded.user_id]);
+
+    if (results.length === 0) {
+      await connection.end();
+      return res.status(404).json({ isSuccess: false, message: 'User not found' });
+    }
+
+    const user = results[0];
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isMatch) {
+      await connection.end();
+      return res.status(401).json({ isSuccess: false, message: 'Current password is incorrect' });
+    }
+
+    const hash = await bcrypt.hash(newPassword, saltRounds);
+    await connection.execute('UPDATE user SET password = ? WHERE user_id = ?', [hash, decoded.user_id]);
+    await connection.end();
+
+    res.json({ isSuccess: true, message: 'Password updated successfully' });
+  } catch (err) {
+    console.error('Error changing password:', err);
+    res.status(500).json({ isSuccess: false, message: 'Server error: ' + err.message });
   }
 });
 
 // 다이어리 추가 엔드포인트
 app.post('/add-diary', async (req, res) => {
-  const { user_id, date, title, content, one } = req.body;
+  const token = req.headers.authorization?.split(' ')[1]; // Assuming Bearer token
 
-  if (!user_id || !date || !title || !content) {
+  if (!token) {
+    return res.status(401).json({ isSuccess: false, message: 'Unauthorized' });
+  }
+
+  const { date, title, content, one } = req.body;
+
+  if (!date || !title || !content) {
     return res.status(400).json({ isSuccess: false, message: '모든 필드를 입력해주세요.' });
   }
 
   try {
+    const decoded = jwt.verify(token, secretKey);
     const connection = await mysql.createConnection(dbConfig);
     const [result] = await connection.execute(
       'INSERT INTO diary (user_id, date, title, content, one) VALUES (?, ?, ?, ?, ?)',
-      [user_id, date, title, content, one]
+      [decoded.user_id, date, title, content, one]
     );
     await connection.end();
     res.status(201).json({ isSuccess: true, message: '일기 추가 성공' });
   } catch (err) {
-    console.error('일기 추가 실패:', err);
-    res.status(500).json({ isSuccess: false, message: '서버 오류: ' + err.message });
+    console.error('Error adding diary:', err);
+    res.status(500).json({ isSuccess: false, message: 'Server error: ' + err.message });
   }
 });
 
-// 다이어리 조회 엔드포인트
+// 다이어리 목록 조회 엔드포인트
 app.get('/get-diaries', async (req, res) => {
   const { user_id } = req.query;
 
@@ -146,12 +194,12 @@ app.get('/get-diaries', async (req, res) => {
 
   try {
     const connection = await mysql.createConnection(dbConfig);
-    const [results] = await connection.execute('SELECT * FROM diary WHERE user_id = ?', [user_id]);
+    const [results] = await connection.execute('SELECT id, title, date FROM diary WHERE user_id = ?', [user_id]);
     await connection.end();
     res.json({ diaries: results });
   } catch (err) {
-    console.error('일기 조회 실패:', err);
-    res.status(500).json({ isSuccess: false, message: '서버 오류: ' + err.message });
+    console.error('Error fetching diaries:', err);
+    res.status(500).json({ isSuccess: false, message: 'Server error: ' + err.message });
   }
 });
 
@@ -174,8 +222,34 @@ app.delete('/delete-diary/:id', async (req, res) => {
 
     res.json({ isSuccess: true, message: '일기 삭제 성공' });
   } catch (err) {
-    console.error('일기 삭제 실패:', err);
-    res.status(500).json({ isSuccess: false, message: '서버 오류: ' + err.message });
+    console.error('Error deleting diary:', err);
+    res.status(500).json({ isSuccess: false, message: 'Server error: ' + err.message });
+  }
+});
+
+// 다이어리 상세 조회 엔드포인트
+app.get('/get-diary/:id', async (req, res) => {
+  const { id } = req.params;
+  const token = req.headers.authorization?.split(' ')[1]; // Assuming Bearer token
+
+  if (!token) {
+    return res.status(401).json({ isSuccess: false, message: 'Unauthorized' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    const connection = await mysql.createConnection(dbConfig);
+    const [results] = await connection.execute('SELECT * FROM diary WHERE id = ? AND user_id = ?', [id, decoded.user_id]);
+    await connection.end();
+
+    if (results.length === 0) {
+      return res.status(404).json({ isSuccess: false, message: 'Diary not found' });
+    }
+
+    res.json({ diary: results[0] });
+  } catch (err) {
+    console.error('Error fetching diary:', err);
+    res.status(500).json({ isSuccess: false, message: 'Server error: ' + err.message });
   }
 });
 
