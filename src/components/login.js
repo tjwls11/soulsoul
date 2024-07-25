@@ -33,7 +33,7 @@ function Login() {
           alert("로그인 성공!");
           localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
-          navigate("/mypage"); // 로그인 성공 후 마이페이지로 이동
+          navigate("/calendar"); 
         } else {
           alert("로그인 실패: " + data.message);
         }

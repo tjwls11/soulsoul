@@ -1,11 +1,6 @@
-/* 전체 배경색 지정*/
-* {
-    background: #FFFBE6;
-  }
-  
-  body {
+body {
     font-family: "Nanum Pen Script";
-  }
+}
   
   .container {
     height: 80px;
