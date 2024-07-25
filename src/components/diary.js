@@ -82,10 +82,7 @@ const Diary = () => {
             {diaries.map((diary) => (
               <tr key={diary.id}>
                 <td className="text-center">
-                  <Link
-                    to={`/detaildiary/${diary.id}`}
-                    className="text-decoration-none"
-                  >
+                  <Link to={`/detaildiary/${diary.id}`} className="text-decoration-none">
                     {diary.title}
                   </Link>
                 </td>
