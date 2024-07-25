@@ -28,15 +28,16 @@ const AddDiary = () => {
         },
         body: JSON.stringify(diaryData),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       const result = await response.json();
 
       if (result.isSuccess) {
         alert('일기가 성공적으로 저장되었습니다.');
-        setDate('');
-        setTitle('');
-        setOneLine('');
-        setDiaryContent('');
-        navigate('/diaries'); // 일기 작성 후 목록 페이지로 이동
+        navigate('/diary'); // 일기 작성 후 목록 페이지로 이동
       } else {
         alert('일기 저장에 실패했습니다.');
       }

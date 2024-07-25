@@ -1,30 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const Diary = () => {
   const [diaries, setDiaries] = useState([]);
-  const user_id = 'YOUR_USER_ID'; // 사용자 ID를 실제 ID로 대체해야 합니다.
+  const user_id = localStorage.getItem('user_id'); // 저장된 사용자 ID 가져오기
 
-  useEffect(() => {
-    fetchDiaries();
-  }, []);
-
-  const fetchDiaries = async () => {
+  const fetchDiaries = useCallback(async () => {
     const token = localStorage.getItem('token'); // 저장된 JWT 토큰 가져오기
     try {
-      const response = await fetch(`http://localhost:3011/get-diaries?user_id=${user_id}`, { // 실제 사용자 ID로 대체
+      const response = await fetch(`http://localhost:3011/get-diaries?user_id=${user_id}`, {
         headers: {
           'Authorization': `Bearer ${token}` // JWT 토큰을 Authorization 헤더에 포함
         }
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       const data = await response.json();
       setDiaries(data.diaries || []);
     } catch (error) {
       console.error('Error fetching diaries:', error);
     }
-  };
+  }, [user_id]);
+
+  useEffect(() => {
+    fetchDiaries();
+  }, [fetchDiaries]);
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token'); // 저장된 JWT 토큰 가져오기
@@ -62,7 +67,6 @@ const Diary = () => {
             <tr>
               <th className="text-center">제목</th>
               <th className="text-center">날짜</th>
-              <th className="text-center">내용</th>
               <th className="text-center">삭제</th>
             </tr>
           </thead>
@@ -71,7 +75,6 @@ const Diary = () => {
               <tr key={diary.id}>
                 <td className="text-center">{diary.title}</td>
                 <td className="text-center">{diary.date}</td>
-                <td className="text-center">{diary.content}</td>
                 <td className="text-center">
                   <button
                     className="btn btn-danger btn-sm"
