@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useLogin } from '../context/LoginContext'; // 로그인 컨텍스트 훅 가져오기
 
 function Login() {
   const [credentials, setCredentials] = useState({
@@ -7,7 +8,9 @@ function Login() {
     password: "",
   });
 
+  const [error, setError] = useState(""); // 에러 메시지를 위한 상태
   const navigate = useNavigate();
+  const { login } = useLogin(); // 로그인 컨텍스트 훅 사용
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,18 +32,19 @@ function Login() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.token) {
-          alert("로그인 성공!");
+        if (data.isSuccess && data.token) {
+          // 로그인 성공 시
+          login(data.user, data.token); // 로그인 컨텍스트 업데이트
           localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
-          navigate("/calendar"); 
+          navigate("/calendar"); // 로그인 후 캘린더 페이지로 이동
         } else {
-          alert("로그인 실패: " + data.message);
+          setError(data.message || "로그인 실패"); // 에러 메시지 업데이트
         }
       })
       .catch((error) => {
         console.error("로그인 오류:", error);
-        alert("로그인 중 오류가 발생했습니다.");
+        setError("로그인 중 오류가 발생했습니다."); // 에러 메시지 업데이트
       });
   };
 
@@ -72,6 +76,7 @@ function Login() {
           로그인
         </button>
       </form>
+      {error && <div className="error-message">{error}</div>} {/* 에러 메시지 표시 */}
       <div className="actions">
         <Link to="/signup" className="signup-link">
           회원가입
@@ -81,4 +86,4 @@ function Login() {
   );
 }
 
-export default Login; // 컴포넌트 이름도 대문자로 변경합니다.
+export default Login;

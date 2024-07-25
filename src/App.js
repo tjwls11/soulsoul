@@ -6,6 +6,8 @@ import Signup from './components/signup';
 import MyPage from './components/mypage';
 import Navbar from './components/navbar';
 import Calendar from './components/calendar';
+import Diary from './components/diary';
+import AddDiary from './components/adddiary';
 import { LoginProvider } from './context/LoginContext';
 
 const App = () => {
@@ -19,6 +21,8 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/diary" element={<Diary />} />
+          <Route path="/add-diary" element={<AddDiary />} />
         </Routes>
       </Router>
     </LoginProvider>

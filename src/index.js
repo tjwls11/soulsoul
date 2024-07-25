@@ -4,6 +4,9 @@ import './style/index.css';
 import "./style/mainpage.css";
 import "./style/login.css";
 import "./style/calendar.css"
+import "./style/navbar.css"
+import "./style/diary.css"
+import "./style/adddiary.css"
 import App from './App';
 
 

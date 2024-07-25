@@ -1,22 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLogin } from '../context/LoginContext';
 
 const Navbar = () => {
-  const { user, logout } = useLogin(); // 로그인 상태와 로그아웃 함수 가져오기
+  const { user, logout } = useLogin();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/'); // 소개 페이지로 리디렉션
+  };
 
   return (
     <nav className="navbar">
       <div className="navbar-links">
-        {user ? ( // 로그인된 경우
+        {user ? (
           <>
             <Link to="/diary">Diary</Link>
             <Link to="/calendar">Mood Tracker</Link>
             <Link to="/mypage">My Page</Link>
-            <button className="logout-button" onClick={logout}>Logout</button>
+            <button className="logout-button" onClick={handleLogout}>Logout</button>
           </>
         ) : (
-          // 로그인되지 않은 경우
           <>
             <Link to="/">Home</Link>
             <Link to="/login">Login</Link>

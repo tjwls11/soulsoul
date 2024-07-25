@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // 로그인 컨텍스트 생성
 const LoginContext = createContext();
@@ -7,9 +7,19 @@ const LoginContext = createContext();
 export const LoginProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  // useEffect를 사용하여 로컬 저장소에서 사용자 정보 로드
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
   // 로그인 함수
-  const login = (userInfo) => {
+  const login = (userInfo, token) => {
     setUser(userInfo);
+    localStorage.setItem('user', JSON.stringify(userInfo));
+    localStorage.setItem('token', token);
   };
 
   // 로그아웃 함수
