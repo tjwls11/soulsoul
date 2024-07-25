@@ -8,6 +8,7 @@ import Navbar from './components/navbar';
 import Calendar from './components/calendar';
 import Diary from './components/diary';
 import AddDiary from './components/adddiary';
+import DetailDiary from './components/detaildiary';
 import { LoginProvider } from './context/LoginContext';
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/diary" element={<Diary />} />
+          <Route path='/detaildiary' element={<DetailDiary />} />
           <Route path="/add-diary" element={<AddDiary />} />
         </Routes>
       </Router>

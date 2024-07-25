@@ -81,7 +81,14 @@ const Diary = () => {
           <tbody>
             {diaries.map((diary) => (
               <tr key={diary.id}>
-                <td className="text-center">{diary.title}</td>
+                <td className="text-center">
+                  <Link
+                    to={`/detaildiary/${diary.id}`}
+                    className="text-decoration-none"
+                  >
+                    {diary.title}
+                  </Link>
+                </td>
                 <td className="text-center">{diary.date}</td>
                 <td className="text-center">
                   <button
