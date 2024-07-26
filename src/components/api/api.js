@@ -10,8 +10,8 @@ export const fetchUserInfo = async (token) => {
     });
     return response.data.user;
   } catch (error) {
-    console.error('Error fetching user info:', error);
-    throw error;
+    console.error('Error fetching user info:', error.response?.data?.message || error.message);
+    throw new Error('Failed to fetch user information');
   }
 };
 
@@ -28,25 +28,26 @@ export const changePassword = async (currentPassword, newPassword, token) => {
       },
     });
   } catch (error) {
-    console.error('Error changing password:', error);
-    throw error;
+    console.error('Error changing password:', error.response?.data?.message || error.message);
+    throw new Error('Failed to change password');
   }
 };
 
 // 무드 데이터 가져오기
-export const fetchMoodData = async (date) => {
+export const fetchMoodData = async (date, token) => {
   try {
     const response = await axios.get(`${API_URL}/api/notes`, {
       params: { date },
+      headers: { 'Authorization': `Bearer ${token}` },
     });
 
-    if (response.data.one === 'No summary available') {
+    if (!response.data.one) {
       return 'No summary available';
     }
 
     return response.data.one;
   } catch (error) {
-    console.error('Error fetching mood data:', error);
-    throw error;
+    console.error('Error fetching mood data:', error.response?.data?.message || error.message);
+    throw new Error('Failed to fetch mood data');
   }
 };

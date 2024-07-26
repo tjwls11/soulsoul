@@ -355,6 +355,7 @@ function Calendar() {
             )}
             {showColorPicker && (
                 <div className="color-picker">
+                    
                     {colors.map(color => (
                         <div
                             key={color}
