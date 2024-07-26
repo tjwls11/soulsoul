@@ -517,7 +517,7 @@ body {
 
 
 
-
+/* CSS */
 .today {
     border: 3px solid #639669; /* 노란색 테두리 */
     background-color: transparent; /* 투명한 배경 */
@@ -543,3 +543,41 @@ body {
     box-sizing: border-box;
     padding: 0;
 }
+
+/* 색상 선택기 */
+.color-picker {
+    position: absolute;
+    top: 50px; /* 적절한 위치로 조정 */
+    right: 50px; /* 적절한 위치로 조정 */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.color-option {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block;
+    margin: 4px;
+}
+
+/* 감정 태그 입력 박스 */
+.mood-tag-popup {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.mood-tag-input {
+    width: 150px;
+    border: none;
+    outline: none;
+}
+

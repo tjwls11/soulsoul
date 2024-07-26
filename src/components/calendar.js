@@ -5,7 +5,6 @@ import {
     setYear, startOfYear, endOfYear, eachMonthOfInterval, addYears, subYears
 } from 'date-fns';
 
-
 function Calendar() {
     // 색상 배열: 각 날짜에 대한 기분 색상을 지정하는 데 사용
     const colors = ['','#FFABAB', '#FFC3A0', '#FFF58E', '#CDE6A5','#ACD1EA','#9FB1D9','#C8BFE7'];
@@ -213,56 +212,56 @@ function Calendar() {
     };
     
 
-// 연간 보기에서 개별 월 렌더링
-const RenderMiniMonth = ({ month, moodColors, onMonthClick }) => {
-    const monthStart = startOfMonth(month);
-    const monthEnd = endOfMonth(month);
-    const startDate = startOfWeek(monthStart);
-    const endDate = endOfWeek(monthEnd);
+    // 연간 보기에서 개별 월 렌더링
+    const RenderMiniMonth = ({ month, moodColors, onMonthClick }) => {
+        const monthStart = startOfMonth(month);
+        const monthEnd = endOfMonth(month);
+        const startDate = startOfWeek(monthStart);
+        const endDate = endOfWeek(monthEnd);
 
-    const rows = [];
-    let day = startDate;
+        const rows = [];
+        let day = startDate;
 
-    while (day <= endDate) {
-        const days = [];
-        for (let i = 0; i < 7; i++) {
-            const currentDay = day;
-            const dayKey = format(currentDay, 'yyyy-MM-dd');
-            const dayColor = moodColors[dayKey] || 'transparent';
+        while (day <= endDate) {
+            const days = [];
+            for (let i = 0; i < 7; i++) {
+                const currentDay = day;
+                const dayKey = format(currentDay, 'yyyy-MM-dd');
+                const dayColor = moodColors[dayKey] || 'transparent';
 
-            days.push(
-                <div
-                    className={`monthly-calendar-cell ${
-                        !isSameMonth(currentDay, monthStart) ? 'disabled' : ''
-                    } ${
-                        isSameDay(currentDay, today) ? 'today' : ''  // 오늘 날짜에 특별한 스타일 추가
-                    }`}
-                    key={dayKey}
-                    onClick={() => onMonthClick(month)}
-                >
-                    <div className="day-circle" style={{ backgroundColor: dayColor }}>
-                        {format(currentDay, 'd')}
+                days.push(
+                    <div
+                        className={`monthly-calendar-cell ${
+                            !isSameMonth(currentDay, monthStart) ? 'disabled' : ''
+                        } ${
+                            isSameDay(currentDay, today) ? 'today' : ''  // 오늘 날짜에 특별한 스타일 추가
+                        }`}
+                        key={dayKey}
+                        onClick={() => onMonthClick(month)}
+                    >
+                        <div className="day-circle" style={{ backgroundColor: dayColor }}>
+                            {format(currentDay, 'd')}
+                        </div>
                     </div>
+                );
+                day = addDays(day, 1);
+            }
+            rows.push(
+                <div className="row" key={format(day, 'yyyy-MM-dd')}>
+                    {days}
                 </div>
             );
-            day = addDays(day, 1);
         }
-        rows.push(
-            <div className="row" key={format(day, 'yyyy-MM-dd')}>
-                {days}
+
+        return (
+            <div className="monthly-calendar" onClick={() => onMonthClick(month)}>
+                <div className="month-box">
+                    <div className="month-title">{format(month, 'M월')}</div>
+                    {rows}
+                </div>
             </div>
         );
-    }
-
-    return (
-        <div className="monthly-calendar" onClick={() => onMonthClick(month)}>
-            <div className="month-box">
-                <div className="month-title">{format(month, 'M월')}</div>
-                {rows}
-            </div>
-        </div>
-    );
-};
+    };
 
     // 연간 보기 모드 렌더링
     const RenderYearView = ({ currentYear, moodColors }) => {

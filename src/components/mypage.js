@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { fetchUserInfo, changePassword } from './api/api'; // API 경로 맞추기
+import { fetchUserInfo, changePassword } from './api/api'; 
 
 const MyPage = () => {
   const [user, setUser] = useState(null);
@@ -35,11 +34,11 @@ const MyPage = () => {
     getUserInfo();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/Login";
-  };
+  //const handleLogout = () => {
+   // localStorage.removeItem("token");
+   // localStorage.removeItem("user");
+   // window.location.href = "/Login";
+ // };
 
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword) {
@@ -119,13 +118,7 @@ const MyPage = () => {
               onChange={(e) => setNewPassword(e.target.value)}
             />
             <button className="Change-button" onClick={handleChangePassword}>Change Password</button>
-            <span className="out" onClick={handleLogout}>Logout</span>
           </div>
-          <h2 className="sec-wrap">
-            <Link to="modify" style={{ textDecoration: "none" }}>
-              수정
-            </Link>
-          </h2>
         </div>
       </section>
     </div>
