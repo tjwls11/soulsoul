@@ -548,13 +548,24 @@ body {
 .color-picker {
     position: absolute;
     top: 50px; /* 적절한 위치로 조정 */
-    right: 50px; /* 적절한 위치로 조정 */
+    right: 30px; /* 적절한 위치로 조정 */
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    z-index: 1000;
+    z-index: 1000; /* 다른 요소들보다 위에 있도록 설정 */
 }
+
+/* 색상 박스 */
+.color-box {
+    width: 30px; /* 박스 크기 조정 */
+    height: 30px; /* 박스 크기 조정 */
+    display: inline-block;
+    cursor: pointer;
+    margin: 2px;
+    border: 1px solid #ddd;
+}
+
 
 .color-option {
     width: 24px;
