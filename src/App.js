@@ -9,7 +9,9 @@ import Calendar from './components/calendar';
 import Diary from './components/diary';
 import AddDiary from './components/adddiary';
 import DetailDiary from './components/detaildiary';
+import StickerShop from './components/StickerShop';
 import { LoginProvider } from './context/LoginContext';
+
 
 const App = () => {
   return (
@@ -25,6 +27,8 @@ const App = () => {
           <Route path="/diary" element={<Diary />} />
           <Route path="/detaildiary/:id" element={<DetailDiary />} />
           <Route path="/add-diary" element={<AddDiary />} />
+          <Route path="/stickershop" element={<StickerShop />} />
+    
         </Routes>
       </Router>
     </LoginProvider>

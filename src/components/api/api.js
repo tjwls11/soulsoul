@@ -91,41 +91,105 @@ export const deleteDiary = async (id, token) => {
   }
 };
 
-// 무드 색상 설정
-export const setMoodColor = async (date, color, token) => {
-  const response = await fetch('/api/set-mood', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ date, color }),
-  });
-  if (!response.ok) throw new Error('Failed to save mood color');
-};
-
-// 특정 날짜의 무드 색상 조회
-export const fetchMoodColor = async (date, token) => {
+// 스티커 목록 가져오기
+export const fetchUserStickers = async (token) => {
   try {
-    const response = await axios.get(`${API_URL}/get-mood/${date}`, {
+    const response = await axios.get(`${API_URL}/get-user-stickers`, {
       headers: { 'Authorization': `Bearer ${token}` },
     });
-    return response.data.color;
+    console.log('Fetched stickers data:', response.data);
+    return response.data;
   } catch (error) {
-    console.error('Error fetching mood color:', error.response?.status, error.response?.data?.message || error.message);
-    throw new Error('Failed to fetch mood color');
+    console.error('Error fetching user stickers:', error.response?.status, error.response?.data?.message || error.message);
+    throw new Error('Failed to fetch user stickers');
   }
 };
 
-// 특정 기간 동안의 무드 색상 조회
+
+// 스티커 추가
+export const addSticker = async (name, imageUrl, token) => {
+  try {
+    await axios.post(`${API_URL}/add-sticker`, {
+      name,
+      imageUrl,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error('Error adding sticker:', error.response?.status, error.response?.data?.message || error.message);
+    throw new Error('Failed to add sticker');
+  }
+};
+
+// 스티커 구매
+export const buySticker = async (stickerId, token) => {
+  try {
+    const response = await axios.post(`${API_URL}/buy-sticker`, 
+      { sticker_id: stickerId },
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error buying sticker:', error.response?.status, error.response?.data?.message || error.message);
+    throw new Error('Failed to buy sticker');
+  }
+};;
+
+// 캘린더에 스티커 추가
+export const addToCalendar = async (date, color, stickerId, token) => {
+  try {
+    await axios.post(`${API_URL}/add-to-calendar`, {
+      date,
+      color,
+      sticker_id: stickerId,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error('Error adding to calendar:', error.response?.status, error.response?.data?.message || error.message);
+    throw new Error('Failed to add to calendar');
+  }
+};
+
+// 날짜 범위에 따른 무드 색상 가져오기
 export const fetchMoodRange = async (startDate, endDate, token) => {
-  const response = await fetch('/api/get-mood-range', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-  });
-  if (!response.ok) throw new Error('Failed to fetch mood range');
-  return response.json();
+  try {
+    const response = await axios.get(`${API_URL}/get-mood-range`, {
+      params: { startDate, endDate },
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching mood range:', error.response?.status, error.response?.data?.message || error.message);
+    throw new Error('Failed to fetch mood range');
+  }
+};
+
+// 특정 날짜의 무드 색상 설정
+export const setMoodColor = async (date, color, token) => {
+  try {
+    await axios.post(`${API_URL}/set-mood`, {
+      date,
+      color,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.error('Error setting mood color:', error.response?.status, error.response?.data?.message || error.message);
+    throw new Error('Failed to set mood color');
+  }
 };
